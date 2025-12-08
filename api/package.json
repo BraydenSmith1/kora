@@ -1,0 +1,27 @@
+{
+  "name": "p2p-energy-api",
+  "version": "0.3.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node src/server.js",
+    "start": "node src/server.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev --name init",
+    "seed": "node src/seed.js",
+    "simulate": "node src/simulate.js"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.18.0",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "nanoid": "^5.0.7",
+    "zod": "^3.23.8",
+    "dotenv": "^16.4.5",
+    "morgan": "^1.10.0",
+    "ethers": "^6.11.1"
+  },
+  "devDependencies": {
+    "prisma": "^5.18.0"
+  }
+}

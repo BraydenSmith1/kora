@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id         String  @id @default(cuid())
+  email      String  @unique
+  name       String?
+  phone      String?
+  organization String?
+  address    String?
+  timezone   String?
+  regionId   String?
+  createdAt  DateTime @default(now())
+  wallet     Wallet?
+  assets     Asset[]
+  offers     Offer[]
+  requests   Request[]
+  buyerTrades  Trade[] @relation("buyerTrades")
+  sellerTrades Trade[] @relation("sellerTrades")
+}
+
+model Wallet {
+  id        String  @id @default(cuid())
+  userId    String  @unique
+  user      User    @relation(fields: [userId], references: [id])
+  currency  String  @default("USD")
+  balanceCents Int  @default(0)
+  paymentMethod String?
+  payoutDetails String?
+}
+
+model Asset {
+  id        String  @id @default(cuid())
+  ownerId   String
+  owner     User    @relation(fields: [ownerId], references: [id])
+  label     String
+  regionId  String?
+  capacityKw Float?
+  meter     Meter?
+  createdAt DateTime @default(now())
+}
+
+model Meter {
+  id        String  @id @default(cuid())
+  assetId   String  @unique
+  asset     Asset   @relation(fields: [assetId], references: [id])
+  whTotal   Int     @default(0)
+  updatedAt DateTime @updatedAt
+}
+
+model EventLog {
+  id        String  @id @default(cuid())
+  type      String
+  refId     String?
+  payload   String?
+  createdAt DateTime @default(now())
+}
+
+model Offer {
+  id        String  @id @default(cuid())
+  userId    String
+  user      User    @relation(fields: [userId], references: [id])
+  regionId  String?
+  priceCentsPerKwh Int
+  quantityKwh      Float
+  filledKwh        Float @default(0)
+  status    String @default("OPEN")
+  createdAt DateTime @default(now())
+}
+
+model Request {
+  id        String  @id @default(cuid())
+  userId    String
+  user      User    @relation(fields: [userId], references: [id])
+  regionId  String?
+  maxPriceCentsPerKwh Int
+  quantityKwh          Float
+  filledKwh            Float @default(0)
+  status    String @default("OPEN")
+  createdAt DateTime @default(now())
+  reservedCents Int   @default(0)
+}
+
+model Trade {
+  id        String  @id @default(cuid())
+  buyerId   String
+  buyer     User    @relation("buyerTrades", fields: [buyerId], references: [id])
+  sellerId  String
+  seller    User    @relation("sellerTrades", fields: [sellerId], references: [id])
+  regionId  String?
+  offerId   String
+  requestId String
+  priceCentsPerKwh Int
+  quantityKwh      Float
+  amountCents      Int
+  status    String @default("PENDING")
+  createdAt DateTime @default(now())
+}
