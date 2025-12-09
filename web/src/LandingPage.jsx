@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const API_URL = localStorage.getItem("API_URL") || "http://localhost:4000";
+// Prefer build-time env var from Render; allow localStorage override for manual testing.
+const API_URL = import.meta.env.VITE_API_URL || localStorage.getItem("API_URL") || "http://localhost:4000";
 
 export default function LandingPage({ onPilotLogin }) {
   const [stats, setStats] = useState(null);

@@ -11,7 +11,8 @@ import AnchorWeeklyBalance from './AnchorWeeklyBalance.jsx';
 import AnchorInstructions from './AnchorInstructions.jsx';
 import OperatorInstructions from './OperatorInstructions.jsx';
 
-const API_URL = localStorage.getItem('API_URL') || 'http://localhost:4000';
+// Prefer build-time env var from Render; allow localStorage override for manual testing.
+const API_URL = import.meta.env.VITE_API_URL || localStorage.getItem('API_URL') || 'http://localhost:4000';
 const EXPLORER_BASE = import.meta.env.VITE_TX_EXPLORER_BASE || 'https://amoy.polygonscan.com/tx/';
 const REGION_LABELS = {
   'region-1': 'Denver Metro',
